@@ -1,4 +1,5 @@
 import os
+import time
 from datetime import datetime
 
 def menu():
@@ -14,17 +15,99 @@ def menu():
     print("7. Navegar al directorio anterior.")
 
 def listar_contenido():
-    pass
+    try:
+        contenido = os.listdir(os.getcwd())
+        if not contenido:
+            print("El directorio está vacío")
+        else:
+            print("Contenido del directorio:")
+            for elemento in contenido:
+                if os.path.isdir(elemento):
+                    print(f"CARPETA] -> {elemento}")
+                else:
+                    print(f"[ARCHIVO] -> {elemento}")
+
+    except Exception as e:
+        print(f"Error. {e}")
+
+
 def crear_directorio():
-    pass
+    nombre = input("Introduce el nombre de la carpeta que quieres crear: ")
+    try:
+        if os.path.exists(nombre):
+            print("Ya existe una carpeta con ese nombre. Prueba otro.")
+        else:
+            os.mkdir(nombre)
+            print(f"Carpeta {nombre} creada corrrectamente.")
+    except Exception as e:
+        print(f"Error. {e}")
+
+
 def crear_archivo():
-    pass
+    nombre = input("Intrdoduce un nombre para el archivo a crear con su extensión (.txt)")
+    try:
+        if os.path.exists(nombre):
+            print("Ya existe una archivo con ese nombre. Prueba otro.")
+            return
+        contenido = input("Introduce el contenido del archivo: ")
+        with open(nombre, "w", encoding="utf-8") as archivo:
+            archivo.write(contenido)
+        print(f"Archivo {nombre} creado correctamente.")
+    except Exception as e:
+        print(f"Error. {e}")
+
+
 def escribir_texto():
-    pass
+    nombre = input("Introduce el nombre del archivo en el que deseas escribir: ")
+    try:
+        if os.path.exists(nombre):
+            print("Ya existe una archivo con ese nombre. Prueba otro.")
+            return
+        texto_a_escribir = input("Introduce el texto que deseas añadir: ")
+        with open(nombre, "a", encoding="utf-8") as archivo:
+            archivo.write(f"\n{texto_a_escribir}")
+        print(f"Texto añadido al archivo {nombre} correctamente.")
+    except Exception as e:
+        print(f"Error. {e}")
+
+
 def eliminar():
-    pass
+    nombre = input("Introduce el nombre de la carpeta a eliminar: ")
+    try:
+        if not os.path.exists(nombre):
+            print("El archivo o carpeta no existe.")
+            return
+        if os.path.isdir(nombre):
+            os.rmdir(nombre)
+            print(f"Carpeta {nombre} eliminada correctamente.")
+        else:
+            os.remove(nombre)
+            print(f"Archivo {nombre} eliminado correctamente.")
+    except OSError as e:
+        print(f"No se puede eliminar {nombre}. Asegúrate de que esté vacío si es una carpeta.")
+    except Exception as e:
+        print(f"Error. {e}")
+
+
 def mostrar_info():
-    pass
+    nombre = input("Introduce el nombre del archivo o carpeta que quieres analizar: ")
+    try:
+        if not os.path.exists(nombre):
+            print("El archivo o carpeta no existe.")
+            return
+        tamano = os.path.getsize(nombre)
+        fecha_mod = time.ctime(os.path.getmtime(nombre))
+        tipo = "Carpeta" if os.path.isdir(nombre) else "Archivo"
+
+        print(f"Información de {nombre}")
+        print(f"Tipo: {tipo}")
+        print(f"Tamaño: {tamano} bytes")
+        print(f"Ultima modificación: {fecha_mod}")
+
+    except Exception as e:
+        print(f"Error. {e}")
+
+
 def main():
     while True:
         print(f"\n Ruta actual: {os.getcwd()}")
